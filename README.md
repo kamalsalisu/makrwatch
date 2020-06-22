@@ -25,7 +25,7 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the req
 
 
 ```bash
-pip install -r requiremenets.txt
+pip install -r requirements.txt
 ```
 Add your YouTube API key in settings.py.
 ```bash
