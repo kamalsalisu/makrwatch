@@ -1,0 +1,72 @@
+{% load humanize %}
+{% load custom_date %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Playfair+Display:wght@600&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div><p>Search Results for "{{ keyword }}"</p></div>
+    {% for video in videos %}
+        <div class="row" style="color: #B8BEBF">
+            <div class="col-lg-3" style="text-align: right">
+                <a href="{{ video.url }}" target="_blank"><img src="{{ video.thumbnails.high.url }}" alt=""
+                                                               width="250px" height="160px"></a>
+            </div>
+            <div class="col-lg-7" style="max-height: 160px">
+                <div>
+                    <a href="{{ video.url }}" style="text-decoration: none" target="_blank">
+                        <h6 style="color: #11161C; font-weight: bold">{{ video.title|truncatechars:75|safe }}</h6></a>
+                    <span>{{ video.channelTitle|safe }}</span><br>
+                    <span style="color: red; font-family: 'Playfair Display', serif">{{ video.views|intcomma }}</span>
+                    View{{ video.views|pluralize }}
+                </div>
+                <div style="height: 50px; margin-top: 8px; margin-bottom: 8px">
+                    <span>{{ video.description|truncatechars:200|safe }}</span>
+                </div>
+                <div>
+                    <span>{{ video.publishedAt|custom_date|naturaltime }}</span>
+                </div>
+
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+        <hr>
+    {% endfor %}
+    {% if not show_all %}
+        <div style="text-align: center">
+            <form action="{% url 'makr:result' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="keyword" value="{{ keyword }}">
+                <button type="submit" class="btn btn-primary">Load All</button>
+            </form>
+        </div>
+    {% endif %}
+    <br><br>
+
+</div>
+
+
+</body>
+<script>
+    {% if scroll %}
+        my_element = document.getElementsByClassName('row')[48];
+        my_element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest"
+        });
+    {% endif %}
+</script>
+</html>
